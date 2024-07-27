@@ -3,11 +3,16 @@ description: 'Apt Get, XCode Select, things like that'
 inputs:
   webhook:
     required: true
+    description: "The webhook for the place to post"
   tag:  # id of input
     required: true
+    desciption: "The tag for this release"
   title:
     required: true
+    description: "First bold line. Probably name of thing"
   subtitle:
+    required: false
+    description: "Second unbold line. Whatever you want"
 runs:
   using: "composite"
   steps:
