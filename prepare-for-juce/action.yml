@@ -1,5 +1,8 @@
 name: 'Setup Image for JUCE Build'
 description: 'Apt Get, XCode Select, things like that'
+defaults:
+  run:
+    shell: bash
 inputs:
   os:  # id of input
     required: true
