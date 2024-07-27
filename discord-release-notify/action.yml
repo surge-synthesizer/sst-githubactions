@@ -1,0 +1,43 @@
+name: 'Setup Image for JUCE Build'
+description: 'Apt Get, XCode Select, things like that'
+inputs:
+  webhook:
+    required: true
+  tag:  # id of input
+    required: true
+  title:
+    required: true
+  subtitle:
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        depth: 1
+      
+    - name: Generate JSON
+      shell: bash
+      run: |
+        echo "**${{ inputs.title }}**" > tmpfile.txt
+        echo "${{ inputs.subtitle }}" >> tmpfile.txt
+        git log -1 --pretty=format:'%h : %s - %an' >> tmpfile.txt
+        echo "\<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{{ inputs.tag }}\>" >> tmpfile.txt
+        
+        awk '{printf "%s\\n", $0}' tmpfile.txt > tmpfile.sline
+        awk '{printf "{ \"content\": \"%s\" }", $0}' tmpfile.sline > tmpfile.json
+        
+        cat tmpfile.json
+
+    - name: Post to discord
+      shell: bash
+      run: |
+        curl -i -H "Accept: application/json" \
+                  -H "Content-Type:application/json" \
+                  -X POST \
+                  -d @tmpfile.json \
+                  ${{ inputs.webhook }}
+
+        
+        
+        
