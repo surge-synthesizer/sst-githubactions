@@ -1,9 +1,13 @@
-name: 'Upload to Nightly'
-description: 'Upload from artifacts to a tag which pre-exists'
+name: 'Upload to Release'
+description: 'Upload from artifacts to a tag'
 inputs:
   tag:
     required: true
   token:
+    required: true
+  reuse_tag:
+    required: true
+  create_tag:
     required: true
 runs:
   using: "composite"
@@ -15,22 +19,38 @@ runs:
       shell: bash
       run: |
         ls -R artifacts
+
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
+      if: ${{ inputs.reuse_tag }}
       with:
         token: ${{ inputs.token }}
         tag: ${{ inputs.tag }}
         assets: '*'
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      if: ${{ inputs.create_tag }}
+      with:
+        tag_name: ${{ inputs.tag }}
+        name: Release ${{ inputs.tag }}
+        body: |
+          ${{ env.GITHUB_REPOSITORY_NAME }} Release ${{ inputs.tag }}
+        draft: false
+        prerelease: false
+
     - name: Upload release assets
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ inputs.token }}
         file: artifacts/**/**/**
-        tag: Nightly
+        tag: ${{ inputs.tag }}
         file_glob: true
+
     - name: Tag Repo
       uses: richardsimko/update-tag@v1
+      if: ${{ inputs.reuse_tag }}
       with:
-        tag_name: Nightly
+        tag_name: ${{ inputs.tag }}
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
