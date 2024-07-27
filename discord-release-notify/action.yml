@@ -27,7 +27,12 @@ runs:
         echo "**${{ inputs.title }}**" > tmpfile.txt
         echo "${{ inputs.subtitle }}" >> tmpfile.txt
         git log -1 --pretty=format:'%h : %s - %an' >> tmpfile.txt
-        echo "\<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag }}\>" >> tmpfile.txt
+        echo "" >> tmpfile.txt
+        echo "<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag }}>" >> tmpfile.txt
+        
+        echo "----"
+        cat tmpfile.txt
+        echo "----"
         
         awk '{printf "%s\\n", $0}' tmpfile.txt > tmpfile.sline
         awk '{printf "{ \"content\": \"%s\" }", $0}' tmpfile.sline > tmpfile.json
