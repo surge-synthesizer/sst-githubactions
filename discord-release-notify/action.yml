@@ -26,7 +26,7 @@ runs:
       run: |
         echo "**${{ inputs.title }}**" > tmpfile.txt
         echo "${{ inputs.subtitle }}" >> tmpfile.txt
-        git log -1 --pretty=format:'%h : %s - %an' >> tmpfile.txt
+        git log -1 --pretty=format:'`%h : %s - %an`' >> tmpfile.txt
         echo "" >> tmpfile.txt
         echo "<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag }}>" >> tmpfile.txt
         
