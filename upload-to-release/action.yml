@@ -12,6 +12,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Show Arguments
+      shell: bash
+      run: |
+        echo "Arguments are: "
+        echo " tag : ${{ inputs.tag }}"
+        echo " reuse_tag : ${{ inputs.reuse_tag }}"
+        echo " create_tag : ${{ inputs.create_tag }}"
+
     - uses: actions/download-artifact@v4
       with:
         path: artifacts
