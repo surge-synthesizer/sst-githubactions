@@ -32,7 +32,7 @@ runs:
     - name: Make MD5Sum
       shell: bash
       run: |
-        find scripts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
+        find artifacts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
 
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
