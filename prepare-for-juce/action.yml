@@ -3,6 +3,9 @@ description: 'Apt Get, XCode Select, things like that'
 inputs:
   os:  # id of input
     required: true
+  gccversion:
+    default: 12
+    description: "Which GCC versoin to pick on ubuntu"
 runs:
   using: "composite"
   steps:
@@ -11,12 +14,12 @@ runs:
       shell: bash
       run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
-    - name: Install Linux Deps; pick GCC12
+    - name: Install Linux Deps; pick GCC
       if: inputs.os == 'Linux'
       shell: bash
       run: |
         sudo apt-get update
         sudo apt install libasound2-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype6-dev libglu1-mesa-dev libjack-jackd2-dev
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 12
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 12
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ inputs.gccversion }} ${{ inputs.gccversion }}
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${{ inputs.gccversion }} ${{ inputs.gccversion }}
 
