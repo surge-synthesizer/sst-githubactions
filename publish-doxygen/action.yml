@@ -1,0 +1,16 @@
+name: 'Publish Doxygen'
+description: 'Run and Publish Doxygen'
+inputs:
+  token:
+    description: "Access token to get to sst-docs"
+    required: true
+  destination:
+    required: true
+    description: "Subdir destination. Probably just the repo name"
+runs:
+  using: "composite"
+  steps:
+    - name: "Bail on Purpose"
+      shell: bash
+      run: |
+        exit 123
