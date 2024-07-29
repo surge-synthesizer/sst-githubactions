@@ -29,10 +29,14 @@ runs:
         pushd source
         doxygen doxygen/Doxyfile
         ls doxy-out
+        pushdo doxy-out
         tar cf - . | (cd ../web/docs/${{ inputs.destination }} && tar xf -)
+        popd
         popd
         cd web
         git status
+        git add .
+        git commit -m "Update doxygen for ${{ inputs.destination }} from github action"
       
 
     - name: "Bail on Purpose"
