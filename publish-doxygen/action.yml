@@ -29,7 +29,7 @@ runs:
         pushd source
         doxygen doxygen/Doxyfile
         ls doxy-out
-        pushdo doxy-out
+        pushd doxy-out
         tar cf - . | (cd ../web/docs/${{ inputs.destination }} && tar xf -)
         popd
         popd
