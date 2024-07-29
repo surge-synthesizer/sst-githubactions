@@ -35,11 +35,10 @@ runs:
         popd
         cd web
         git status
+        
+        git config user.email "paul@baconpaul.org"
+        git config user.name "baconpaul"
+        
         git add .
         git commit -m "Update doxygen for ${{ inputs.destination }} from github action"
-      
-
-    - name: "Bail on Purpose"
-      shell: bash
-      run: |
-        exit 123
+        git push origin main
