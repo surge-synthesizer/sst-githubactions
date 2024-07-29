@@ -71,6 +71,7 @@ runs:
         touch rn.md
         if test -f "${{ inputs.release_blurb_file }}"; then
           cat "${{ inputs.release_blurb_file }}" >> rn.md
+          echo "" >> rn.md
         fi
         echo "Release updated " `date` >> rn.md
         echo >> rn.md
