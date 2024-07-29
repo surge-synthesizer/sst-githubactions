@@ -30,7 +30,7 @@ runs:
         doxygen doxygen/Doxyfile
         ls doxy-out
         pushd doxy-out
-        mkdir ../../web/docs/${{ inputs.destination }}
+        mkdir -p ../../web/docs/${{ inputs.destination }}
         tar cf - . | (cd ../../web/docs/${{ inputs.destination }} && tar xf -)
         popd
         popd
