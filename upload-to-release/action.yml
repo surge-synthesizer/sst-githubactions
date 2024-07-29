@@ -74,7 +74,7 @@ runs:
         fi
         echo "Release updated " `date` >> rn.md
         echo >> rn.md
-        git log -5 --pretty=format:'- [%h](${{ github.server_url }}/${{ github.repository }}/commits/%H) : %s'  >> rn.md
+        git log -5 --pretty=format:'- [%h](${{ github.server_url }}/${{ github.repository }}/commit/%H) : %s'  >> rn.md
 
         gh release edit --notes-file rn.md ${{ inputs.tag }}
 
