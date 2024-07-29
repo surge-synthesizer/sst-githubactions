@@ -25,7 +25,11 @@ runs:
       shell: bash
       run: |
         echo "**${{ inputs.title }}**" > tmpfile.txt
-        echo "${{ inputs.subtitle }}" >> tmpfile.txt
+        
+        if test -z "${{ inputs.subtitle }}"; then
+          echo "${{ inputs.subtitle }}" >> tmpfile.txt
+        fi
+        
         git log -1 --pretty=format:'`%h : %s - %an`' >> tmpfile.txt
         echo "" >> tmpfile.txt
         echo "<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag }}>" >> tmpfile.txt
