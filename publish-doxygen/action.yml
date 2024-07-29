@@ -11,12 +11,12 @@ runs:
   using: "composite"
   steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: source
 
     - name: Checkout web
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: web
         repository: surge-synthesizer/sst-docs
