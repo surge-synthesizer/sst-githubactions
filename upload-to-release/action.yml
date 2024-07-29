@@ -9,6 +9,8 @@ inputs:
     required: true
   create_tag:
     required: true
+  release_blurb_file:
+    description: "A file in your source tree which is included in the release"
 runs:
   using: "composite"
   steps:
@@ -34,6 +36,12 @@ runs:
       run: |
         find artifacts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
 
+    - name: Checkout code for release notes
+      uses: actions/checkout@v4
+      with:
+        path: source
+        fetch-depth: 5
+
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
       if: ${{ inputs.reuse_tag == 'true'}}
@@ -52,6 +60,22 @@ runs:
           ${{ env.GITHUB_REPOSITORY_NAME }} Release ${{ inputs.tag }}
         draft: false
         prerelease: false
+
+    - name: Update Release Notes
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        touch rn.md
+        if test -f "${{ inputs.release_blurb_file }}"; then
+          cat "${{ inputs.release_blurb_file }}" >> rn.md
+        fi
+        echo "Release updated " `date` >> rn.md
+        echo >> rn.md
+        git log -5 --pretty=format:'- [%h](${{ github.server_url }}/${{ github.repository }}/commits/%H) : %s'  >> rn.md
+
+        gh release edit --notes-file rn.md ${{ inputs.tag }}
+
 
     - name: Upload release assets
       uses: svenstaro/upload-release-action@v2
