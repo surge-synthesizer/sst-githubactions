@@ -22,6 +22,18 @@ runs:
         repository: surge-synthesizer/sst-docs
         token: ${{ inputs.token }}
 
+    - name: Run Doxygen
+      shell: bash
+      run: |
+        sudo apt-get install doxygen graphviz
+        pushd source
+        doxygen doxygen/Doxyfile
+        ls doxy-out
+        tar cf - . | (cd ../web/docs/${{ inputs.destination }} && tar xf -)
+        popd
+        cd web
+        git status
+      
 
     - name: "Bail on Purpose"
       shell: bash
