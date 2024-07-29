@@ -49,6 +49,7 @@ runs:
         token: ${{ inputs.token }}
         tag: ${{ inputs.tag }}
         assets: '*'
+        fail-if-no-assets: false
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
