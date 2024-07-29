@@ -66,6 +66,7 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.token }}
       run: |
+        cd source
         touch rn.md
         if test -f "${{ inputs.release_blurb_file }}"; then
           cat "${{ inputs.release_blurb_file }}" >> rn.md
