@@ -26,9 +26,7 @@ runs:
       run: |
         echo "**${{ inputs.title }}**" > tmpfile.txt
         
-        if test -z "${{ inputs.subtitle }}"; then
-          echo "${{ inputs.subtitle }}" >> tmpfile.txt
-        fi
+        test -z "${{ inputs.subtitle }}" || (echo "${{ inputs.subtitle }}" >> tmpfile.txt)  
         
         git log -1 --pretty=format:'`%h : %s - %an`' >> tmpfile.txt
         echo "" >> tmpfile.txt
