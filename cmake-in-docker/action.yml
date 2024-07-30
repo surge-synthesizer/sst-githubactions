@@ -28,10 +28,12 @@ runs:
         password: ${{ inputs.token }}
 
     - name: Docker Pull
+      shell: bash
       run: |
         docker pull ${{ inputs.image }}
 
     - name: Docker Create and Start
+      shell: bash
       run: |
         export VUID=$(id -u)
         export VGID=$(id -g)
@@ -42,6 +44,7 @@ runs:
 
 
     - name: Docker Build and Stop
+      shell: bash
       run: |
         docker exec docker_build bash -c "(cd /home/build/plugin && \
                  cmake -S . -B ./build ${{ inputs.cmakeArgs }} && \
