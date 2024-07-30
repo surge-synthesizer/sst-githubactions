@@ -1,0 +1,51 @@
+name: 'CMake in Docker'
+description: 'CMake in Docker'
+inputs:
+  image: 
+    description: "Docker Image"
+    default: ghcr.io/surge-synthesizer/sst-dockerimages/ubuntu18_gcc11:main
+  username:
+    required: true
+  token:
+    required: true
+  registry:
+    default: ghcr.io
+  target:
+    required: true
+  cmakeArgs:
+    default: ""
+  dockerCreateArgs:
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Login to GHCR.io
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.actor }}
+        password: ${{ inputs.token }}
+
+    - name: Docker Pull
+      run: |
+        docker pull ${{ inputs.image }}
+
+    - name: Docker Create and Start
+      run: |
+        export VUID=$(id -u)
+        export VGID=$(id -g)
+
+        docker create --user $VUID:$VGID --name docker_build --interactive --tty \
+            ${{inputs.dockerCreateArgs }} --volume=`pwd`:/home/build/plugin ${{ inputs.image }}
+        docker start docker_build
+
+
+    - name: Docker Build and Stop
+      run: |
+        docker exec docker_build bash -c "(cd /home/build/plugin && \
+                 cmake -S . -B ./build ${{ inputs.cmakeArgs }} && \
+                 cmake --build ./build --target ${{ inputs.target }} --parallel 3 )"
+        docker stop docker_build
+        ls -al
+
