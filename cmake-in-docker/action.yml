@@ -24,7 +24,7 @@ runs:
       uses: docker/login-action@v3
       with:
         registry: ${{ inputs.registry }}
-        username: ${{ inputs.actor }}
+        username: ${{ inputs.username }}
         password: ${{ inputs.token }}
 
     - name: Docker Pull
