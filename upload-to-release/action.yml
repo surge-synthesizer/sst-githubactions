@@ -40,19 +40,22 @@ runs:
 
     - name: Make Source Tarball
       shell: bash
+      id: srctar
       run: |
         pushd source
-        export TFN=../source-${{ env.GITHUB_REPOSITORY_NAME }}-`git rev-parse --short HEAD`.tar.gz
+        export TFN=source-${{ env.GITHUB_REPOSITORY_NAME }}-`git rev-parse --short HEAD`.tar.gz
         mv .git ../old_dotgit
-        tar cvzf ${TFN} .
+        tar czf ../${TFN} .
         mv ../old_dotgit .git
         popd
+        echo "tarfile=${TFN}" >> $GITHUB_OUTPUT
 
     - name: Make MD5Sum
       shell: bash
       run: |
         find artifacts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
-        md5sum source*.tar.gz >> artifact_md5sum.txt
+        md5sum ${{ steps.srctar.outputs.tarfile }} >> artifact_md5sum.txt
+        cat artifact_md5sum
 
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
@@ -104,7 +107,7 @@ runs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ inputs.token }}
-        file: source**.tar.gz
+        file: ${{ steps.srctar.outputs.tarfile }}
         tag: ${{ inputs.tag }}
         file_glob: false
 
