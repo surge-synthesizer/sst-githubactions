@@ -55,7 +55,7 @@ runs:
       run: |
         find artifacts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
         md5sum ${{ steps.srctar.outputs.tarfile }} >> artifact_md5sum.txt
-        cat artifact_md5sum
+        cat artifact_md5sum.txt
 
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
