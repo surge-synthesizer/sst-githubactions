@@ -36,14 +36,14 @@ runs:
       with:
         path: source
         fetch-depth: 5
-        recursive: true
+        submodules: recursive
 
     - name: Make Source Tarball
       shell: bash
       id: srctar
       run: |
         pushd source
-        export TFN=source-${{ env.GITHUB_REPOSITORY_NAME }}-`git rev-parse --short HEAD`.tar.gz
+        export TFN=source-${{ github.repository }}-`git rev-parse --short HEAD`.tar.gz
         mv .git ../old_dotgit
         tar czf ../${TFN} .
         mv ../old_dotgit .git
@@ -73,7 +73,7 @@ runs:
         tag_name: ${{ inputs.tag }}
         name: Release ${{ inputs.tag }}
         body: |
-          ${{ env.GITHUB_REPOSITORY_NAME }} Release ${{ inputs.tag }}
+          ${{ github.repository }} Release ${{ inputs.tag }}
         draft: false
         prerelease: false
 
