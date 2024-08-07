@@ -52,6 +52,7 @@ runs:
       shell: bash
       run: |
         find artifacts -type f -exec md5sum '{}' \; > artifact_md5sum.txt
+        md5sum source*.tar.gz >> artifact_md5sum.txt
 
     - name: Delete old release assets
       uses: mknejp/delete-release-assets@v1
