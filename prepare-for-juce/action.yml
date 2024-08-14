@@ -5,7 +5,7 @@ inputs:
     required: true
   gccversion:
     default: 12
-    description: "Which GCC versoin to pick on ubuntu"
+    description: "Which GCC version to pick on ubuntu"
 runs:
   using: "composite"
   steps:
@@ -13,6 +13,10 @@ runs:
       if: inputs.os == 'macOS'
       shell: bash
       run: sudo xcode-select -switch /Applications/Xcode_15.1.app
+
+    - name: Install Ninja on Mac and Win
+      uses: seanmiddleditch/gha-setup-ninja@master
+      if: inputs.os == 'windows' || inputs.os == 'macOS'
 
     - name: Install Linux Deps; pick GCC
       if: inputs.os == 'Linux'
