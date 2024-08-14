@@ -14,9 +14,8 @@ runs:
       shell: bash
       run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
-    - name: Install Ninja on Mac and Win
+    - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
-      if: inputs.os == 'windows' || inputs.os == 'macOS'
 
     - name: Install Linux Deps; pick GCC
       if: inputs.os == 'Linux'
