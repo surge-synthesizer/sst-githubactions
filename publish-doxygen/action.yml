@@ -7,6 +7,14 @@ inputs:
   destination:
     required: true
     description: "Subdir destination. Probably just the repo name"
+  configdir:
+    description: 'Doxygen Configuration Dir'
+    required: false
+    default: 'doxygen'
+  outputdir:
+    description: 'Doxygen Output Dir'
+    required: false
+    default: 'doxy-out'
 runs:
   using: "composite"
   steps:
@@ -27,9 +35,9 @@ runs:
       run: |
         sudo apt-get install doxygen graphviz
         pushd source
-        doxygen doxygen/Doxyfile
-        ls doxy-out
-        pushd doxy-out
+        doxygen ${{ inputs.configdir }}/Doxyfile
+        ls ${{ inputs.outputdir }}
+        pushd ${{ inputs.outputdir }}
         mkdir -p ../../web/docs/${{ inputs.destination }}
         tar cf - . | (cd ../../web/docs/${{ inputs.destination }} && tar xf -)
         popd
