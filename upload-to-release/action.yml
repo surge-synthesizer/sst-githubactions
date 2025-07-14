@@ -44,6 +44,7 @@ runs:
       run: |
         pushd source
 
+        ( test -f ./scripts/make-git-info.sh && . ./scripts/make-git-info.sh ) || true
         ( test -f libs/sst/sst-plugininfra/cmake/git-version-functions.cmake && cmake -DGITHUB_ACTIONS_BUILD=TRUE -DGENERATE_BUILD_VERSION=TRUE -P libs/sst/sst-plugininfra/cmake/git-version-functions.cmake ) || true
 
         export TFN=${{ github.event.repository.name }}-source-`git rev-parse --short HEAD`.tar.gz
