@@ -12,7 +12,8 @@ runs:
     - name: Select Xcode Version
       if: inputs.os == 'macOS'
       shell: bash
-      run: sudo xcode-select -switch /Applications/Xcode_15.1.app
+      #run: sudo xcode-select -switch /Applications/Xcode_15.1.app
+      run: echo "MacOS is just fine"
 
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
