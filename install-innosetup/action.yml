@@ -1,0 +1,26 @@
+name: "Install Inno Setup"
+
+description: "Install Inno Setup"
+
+inputs:
+  version:
+    description: "Version"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          innosetup-${{ inputs.version }}
+        key: ${{ runner.os }}-innosetup-${{ inputs.version }}
+
+    - name: Install
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri https://files.jrsoftware.org/is/6/innosetup-${{ inputs.version }}.exe -OutFile innosetup-${{ inputs.version }}.exe
+        Start-Process -FilePath ".\innosetup-${{ inputs.version }}.exe" -ArgumentList "/VERYSILENT", "/CURRENTUSER", "/DIR=innosetup-${{ inputs.version }}" -Wait
+        Remove-Item .\innosetup-${{ inputs.version }}.exe
+        Add-Content $env:GITHUB_PATH "$(Get-Location)\innosetup-${{ inputs.version }}"
