@@ -10,7 +10,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache InnoSetup
+    - name: Cache Inno Setup
       id: cache-innosetup
       uses: actions/cache@v4
       with:
@@ -18,7 +18,7 @@ runs:
           innosetup-${{ inputs.version }}
         key: ${{ runner.os }}-innosetup-${{ inputs.version }}
 
-    - name: Install
+    - name: Install Inno Setup
       if: steps.cache-innosetup.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
@@ -27,7 +27,7 @@ runs:
         Remove-Item .\innosetup-${{ inputs.version }}.exe
         Add-Content $env:GITHUB_PATH "$(Get-Location)\innosetup-${{ inputs.version }}"
 
-    - name: Add to path
+    - name: Add Inno Setup to path
       shell: pwsh
       run: |
         Add-Content $env:GITHUB_PATH "$(Get-Location)\innosetup-${{ inputs.version }}"
