@@ -16,7 +16,9 @@ runs:
       run: echo "MacOS is just fine"
 
     - name: Install Ninja
-      uses: seanmiddleditch/gha-setup-ninja@master
+      uses: surge-synthesizer/sst-githubactions/install-ninja@main
+      with:
+        version: "1.13.1"
 
     - name: Install Linux Deps; pick GCC
       if: inputs.os == 'Linux'
