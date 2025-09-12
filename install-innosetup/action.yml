@@ -26,3 +26,8 @@ runs:
         Start-Process -FilePath ".\innosetup-${{ inputs.version }}.exe" -ArgumentList "/VERYSILENT", "/CURRENTUSER", "/DIR=innosetup-${{ inputs.version }}" -Wait
         Remove-Item .\innosetup-${{ inputs.version }}.exe
         Add-Content $env:GITHUB_PATH "$(Get-Location)\innosetup-${{ inputs.version }}"
+
+    - name: Add to path
+      shell: pwsh
+      run: |
+        Add-Content $env:GITHUB_PATH "$(Get-Location)\innosetup-${{ inputs.version }}"
