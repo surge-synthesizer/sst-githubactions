@@ -15,11 +15,6 @@ runs:
       #run: sudo xcode-select -switch /Applications/Xcode_15.1.app
       run: echo "MacOS is just fine"
 
-    - name: Install Ninja
-      uses: surge-synthesizer/sst-githubactions/install-ninja@main
-      with:
-        version: "1.13.1"
-
     - name: Install Linux Deps; pick GCC
       if: inputs.os == 'Linux'
       shell: bash
