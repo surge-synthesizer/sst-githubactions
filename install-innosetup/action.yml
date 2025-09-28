@@ -5,7 +5,8 @@ description: "Install Inno Setup"
 inputs:
   version:
     description: "Version"
-    required: true
+    required: false
+    default: "6.5.4"
 
 runs:
   using: "composite"
