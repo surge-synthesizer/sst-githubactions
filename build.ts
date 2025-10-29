@@ -20,7 +20,7 @@ await Promise.all(
             target: "node24",
             format: "cjs",
             bundle: true,
-            minify: true,
+            minify: false,
             sourcemap: false,
             external: [...builtinModules],
         }),
