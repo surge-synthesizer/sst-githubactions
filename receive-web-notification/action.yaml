@@ -1,0 +1,7 @@
+name: Receive Web Notification
+
+description: Receive a surge-synth-team website notification
+
+runs:
+  using: node24
+  main: dist/index.js

@@ -1,0 +1,27 @@
+name: Send Web Notification
+
+description: Notify a surge-synth-team website
+
+inputs:
+  web_repo:
+    description: "surge-synth-team.org or surge-synthesizer.github.io"
+    required: true
+  event_type:
+    description: "Type of event"
+    required: true
+  name:
+    description: "Name of project"
+    required: true
+  version:
+    description: "Version of build"
+    required: true
+  releases:
+    description: "JSON object describing project releases"
+    required: false
+  data:
+    description: "JSON object of data"
+    required: false
+
+runs:
+  using: node24
+  main: dist/index.cjs

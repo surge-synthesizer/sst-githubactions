@@ -1,0 +1,20 @@
+{
+    "name": "sst-githubactions",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "preinstall": "node ./preinstall.ts",
+        "build": "node ./build.ts"
+    },
+    "devDependencies": {
+        "@actions/core": "^1.11.1",
+        "@actions/github": "^6.0.1",
+        "@js-temporal/polyfill": "^0.5.1",
+        "@octokit/rest": "^22.0.0",
+        "@types/node": "^24.9.2",
+        "esbuild": "^0.25.11",
+        "octokit": "^5.0.4",
+        "prettier": "^3.6.2",
+        "typescript": "^5.9.3"
+    }
+}
