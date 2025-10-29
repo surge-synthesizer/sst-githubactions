@@ -13,6 +13,7 @@ import { execSync, spawnSync } from "node:child_process";
     let releases: Record<string, string>;
 
     try {
+        console.log(`releasesInput: ${releasesInput}`);
         releases = JSON.parse(releasesInput);
     } catch (error) {
         throw new Error(`Invalid JSON for releases input: ${error}`);
@@ -22,6 +23,7 @@ import { execSync, spawnSync } from "node:child_process";
     let data: Record<string, string>;
 
     try {
+        console.log(`dataInput: ${dataInput}`);
         data = JSON.parse(dataInput);
     } catch (error) {
         throw new Error(`Invalid JSON for data input: ${error}`);

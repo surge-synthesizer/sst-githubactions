@@ -28409,6 +28409,7 @@ var import_node_child_process = require("node:child_process");
   const releasesInput = (0, import_core2.getInput)("releases", { required: false }) || "{}";
   let releases;
   try {
+    console.log(`releasesInput: ${releasesInput}`);
     releases = JSON.parse(releasesInput);
   } catch (error) {
     throw new Error(`Invalid JSON for releases input: ${error}`);
@@ -28416,6 +28417,7 @@ var import_node_child_process = require("node:child_process");
   const dataInput = (0, import_core2.getInput)("data", { required: false }) || "{}";
   let data;
   try {
+    console.log(`dataInput: ${dataInput}`);
     data = JSON.parse(dataInput);
   } catch (error) {
     throw new Error(`Invalid JSON for data input: ${error}`);
