@@ -32,7 +32,7 @@ import { execSync, spawnSync } from "node:child_process";
     const octokit = new Octokit({ auth: process.env.GH_TOKEN });
 
     await octokit.repos.createDispatchEvent({
-        owner: "surge",
+        owner: "surge-synthesizer",
         repo: web_repo,
         event_type,
         client_payload: {
