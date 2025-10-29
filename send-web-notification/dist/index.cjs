@@ -28402,14 +28402,13 @@ var Octokit2 = Octokit.plugin(requestLog, legacyRestEndpointMethods, paginateRes
 // send-web-notification/src/index.ts
 var import_node_child_process = require("node:child_process");
 (async () => {
-  const web_repo = (0, import_core2.getInput)("web_repo", { required: true });
+  const web_repo = (0, import_core2.getInput)("web_repo");
   const event_type = (0, import_core2.getInput)("event_type", { required: true });
   const name = (0, import_core2.getInput)("name", { required: true });
   const version = (0, import_core2.getInput)("version", { required: true });
   const releasesInput = (0, import_core2.getInput)("releases", { required: false }) || "{}";
   let releases;
   try {
-    console.log(`releasesInput: ${releasesInput}`);
     releases = JSON.parse(releasesInput);
   } catch (error) {
     throw new Error(`Invalid JSON for releases input: ${error}`);
@@ -28417,7 +28416,6 @@ var import_node_child_process = require("node:child_process");
   const dataInput = (0, import_core2.getInput)("data", { required: false }) || "{}";
   let data;
   try {
-    console.log(`dataInput: ${dataInput}`);
     data = JSON.parse(dataInput);
   } catch (error) {
     throw new Error(`Invalid JSON for data input: ${error}`);
@@ -28431,7 +28429,9 @@ var import_node_child_process = require("node:child_process");
       data: {
         name,
         version,
-        project_repo: (0, import_node_child_process.execSync)(`gh repo view --json url --jq '.url'`),
+        project_repo: (0, import_node_child_process.execSync)(`gh repo view --json url --jq .url`, {
+          encoding: "utf-8"
+        }).trim(),
         releases,
         data,
         build_time: qi.Now.plainDateTimeISO().toString(),

@@ -5,7 +5,7 @@ description: Notify a surge-synth-team website
 inputs:
   web_repo:
     description: "surge-synth-team.org or surge-synthesizer.github.io"
-    required: true
+    default: "surge-synth-team.org"
   event_type:
     description: "Type of event"
     required: true

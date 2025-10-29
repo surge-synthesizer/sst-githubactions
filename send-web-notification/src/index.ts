@@ -4,7 +4,7 @@ import { Octokit } from "@octokit/rest";
 import { execSync, spawnSync } from "node:child_process";
 
 (async () => {
-    const web_repo = getInput("web_repo", { required: true });
+    const web_repo = getInput("web_repo");
     const event_type = getInput("event_type", { required: true });
     const name = getInput("name", { required: true });
     const version = getInput("version", { required: true });
@@ -13,7 +13,6 @@ import { execSync, spawnSync } from "node:child_process";
     let releases: Record<string, string>;
 
     try {
-        console.log(`releasesInput: ${releasesInput}`);
         releases = JSON.parse(releasesInput);
     } catch (error) {
         throw new Error(`Invalid JSON for releases input: ${error}`);
@@ -23,7 +22,6 @@ import { execSync, spawnSync } from "node:child_process";
     let data: Record<string, string>;
 
     try {
-        console.log(`dataInput: ${dataInput}`);
         data = JSON.parse(dataInput);
     } catch (error) {
         throw new Error(`Invalid JSON for data input: ${error}`);
@@ -39,7 +37,9 @@ import { execSync, spawnSync } from "node:child_process";
             data: {
                 name,
                 version,
-                project_repo: execSync(`gh repo view --json url --jq '.url'`),
+                project_repo: execSync(`gh repo view --json url --jq .url`, {
+                    encoding: "utf-8",
+                }).trim(),
                 releases,
                 data,
                 build_time: Temporal.Now.plainDateTimeISO().toString(),
