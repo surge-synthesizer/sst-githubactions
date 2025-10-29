@@ -21,6 +21,6 @@ import { join, resolve } from "node:path";
     git config user.email 41898282+github-actions[bot]@users.noreply.github.com &&
     git add -A &&
     (git commit -m 'github-actions: Update generated files' || echo "No changes to commit") &&
-    git push origin main`,
+    git push origin master`,
     );
 })();
