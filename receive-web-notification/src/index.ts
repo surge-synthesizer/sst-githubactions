@@ -10,6 +10,7 @@ import { join, resolve } from "node:path";
     }
 
     const event = JSON.parse(await readFile(event_path, "utf8"));
+    console.dir(event, { depth: null });
 
     await writeFile(
         join(resolve("src/content/generated"), `${event.event_type}.json`),

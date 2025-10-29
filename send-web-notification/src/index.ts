@@ -32,7 +32,7 @@ import { execSync, spawnSync } from "node:child_process";
     await octokit.repos.createDispatchEvent({
         owner: "surge-synthesizer",
         repo: web_repo,
-        event_type,
+        event_type: event_type,
         client_payload: {
             data: {
                 name,

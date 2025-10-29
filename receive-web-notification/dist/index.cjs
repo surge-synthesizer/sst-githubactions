@@ -10,6 +10,7 @@ var import_node_path = require("node:path");
     throw new Error("GITHUB_EVENT_PATH not set");
   }
   const event = JSON.parse(await (0, import_promises.readFile)(event_path, "utf8"));
+  console.dir(event, { depth: null });
   await (0, import_promises.writeFile)(
     (0, import_node_path.join)((0, import_node_path.resolve)("src/content/generated"), `${event.event_type}.json`),
     JSON.stringify(event.client_payload.data, null, 4)
