@@ -13,7 +13,7 @@ import { join, resolve } from "node:path";
     console.dir(event, { depth: null });
 
     await writeFile(
-        join(resolve("src/content/generated"), `${event.event_type}.json`),
+        join(resolve("src/content/generated"), `${event.action}.json`),
         JSON.stringify(event.client_payload.data, null, 4),
     );
 

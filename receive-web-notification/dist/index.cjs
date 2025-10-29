@@ -12,7 +12,7 @@ var import_node_path = require("node:path");
   const event = JSON.parse(await (0, import_promises.readFile)(event_path, "utf8"));
   console.dir(event, { depth: null });
   await (0, import_promises.writeFile)(
-    (0, import_node_path.join)((0, import_node_path.resolve)("src/content/generated"), `${event.event_type}.json`),
+    (0, import_node_path.join)((0, import_node_path.resolve)("src/content/generated"), `${event.action}.json`),
     JSON.stringify(event.client_payload.data, null, 4)
   );
   (0, import_node_child_process.execSync)(
