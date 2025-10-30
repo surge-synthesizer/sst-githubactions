@@ -69395,6 +69395,9 @@ var path = __toESM(require("node:path"), 1);
 var stream = __toESM(require("node:stream"), 1);
 var util = __toESM(require("node:util"), 1);
 (async () => {
+  if (os.platform() !== "win32") {
+    return;
+  }
   try {
     const stream_pipeline = util.promisify(stream.pipeline);
     const version = (0, import_core.getInput)("version", { required: true });
@@ -69402,10 +69405,7 @@ var util = __toESM(require("node:util"), 1);
     const install_dir = path.join(workspace, `innosetup-${version}`);
     const cache_key = `${os.platform()}-innosetup-${version}`;
     const restored_key = await cache.restoreCache([install_dir], cache_key);
-    if (restored_key) {
-      core.info(`Cache hit for Inno Setup ${version}`);
-    } else {
-      core.info(`Cache miss, downloading Inno Setup ${version}`);
+    if (!restored_key) {
       const asset_url = `https://files.jrsoftware.org/is/6/innosetup-${version}.exe`;
       const installer_path = path.join(workspace, `innosetup-${version}.exe`);
       const res = await fetch(asset_url);
