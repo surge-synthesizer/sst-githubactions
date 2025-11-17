@@ -9,7 +9,8 @@ import * as stream from "node:stream";
 import * as util from "node:util";
 
 (async () => {
-    if (os.platform() !== "win32") {
+    if (process.env.RUNNER_OS !== "Windows") {
+        core.info(`Runner OS is not Windows, skipping...`);
         return;
     }
 

@@ -69395,7 +69395,8 @@ var path = __toESM(require("node:path"), 1);
 var stream = __toESM(require("node:stream"), 1);
 var util = __toESM(require("node:util"), 1);
 (async () => {
-  if (os.platform() !== "win32") {
+  if (process.env.RUNNER_OS !== "Windows") {
+    core.info(`Runner OS is not Windows, skipping...`);
     return;
   }
   try {
