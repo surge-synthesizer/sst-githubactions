@@ -32,6 +32,14 @@ jobs:
 
 Builds a notification of release to our discord, given a webhook.
 
+## `install-innosetup`
+
+Installs [Inno Setup](https://jrsoftware.org/isinfo.php) for making Windows installers.
+
+## `install-ninja`
+
+Install [Ninja](https://ninja-build.org/). Not necessary as runners now include ninja.
+
 ## `prepare-for-juce`
 
 Sets up a machine for a juce build. Has a 'gccversion' option to control
@@ -40,6 +48,10 @@ gcc on linux
 ## `publish-doxygen`
 
 does the steps to publish one of our libraries doxygen setups to sst-docs
+
+## `receive-web-notification` & `send-web-notification`
+
+Send & receive product release information for both surge-synth-team.org and surge-synthesizer.github.io.
 
 ## `upload-to-release`
 
