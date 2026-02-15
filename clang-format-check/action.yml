@@ -18,7 +18,7 @@ runs:
     - name: Run clang format
       shell: bash
       run: |
-        echo "Running clang-format on ${{ inputs.path }}" >> $GITHUB_OUTPUT
-        clang-format --version >> $GITHUB_OUTPUT   
+        echo "Running clang-format on ${{ inputs.path }}" 
+        clang-format --version 
         pushd ${{ inputs.path }}
         find . -regex '.*\.\(cpp\|hpp\|cc\|cxx\|h\|c\|m\|mm\)' -exec clang-format -style=file --dry-run --Werror {} +
