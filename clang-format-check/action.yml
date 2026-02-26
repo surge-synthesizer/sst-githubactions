@@ -1,7 +1,8 @@
-name: 'Clang Format Check'
-description: 'Apt Get, XCode Select, things like that'
+name: "Clang Format Check"
+description: "Clang Format Check"
 inputs:
   path:
+    description: "Path to check with clang-format"
     required: true
 runs:
   using: "composite"
@@ -9,16 +10,18 @@ runs:
     - name: Setup Python
       uses: actions/setup-python@v6
       with:
-        python-version: '3.x'
+        python-version: "3.x"
+
+    - name: Setup uv
+      uses: astral-sh/setup-uv@v7
 
     - name: Install clang-format
-      shell: bash
-      run: pip3 install clang-format==21.1.5
+      uses: surge-synthesizer/sst-githubactions/install-clang-format@main
 
     - name: Run clang format
       shell: bash
       run: |
-        echo "Running clang-format on ${{ inputs.path }}" 
-        clang-format --version 
+        echo "Running clang-format on ${{ inputs.path }}"
+        clang-format --version
         pushd ${{ inputs.path }}
         find . -regex '.*\.\(cpp\|hpp\|cc\|cxx\|h\|c\|m\|mm\)' -exec clang-format -style=file --dry-run --Werror {} +
