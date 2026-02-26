@@ -1,0 +1,12 @@
+name: "Install Gersemi"
+
+description: "Install Gersemi"
+
+inputs:
+  version:
+    description: "Version"
+    default: "0.26.0"
+
+runs:
+  using: node24
+  main: dist/index.cjs

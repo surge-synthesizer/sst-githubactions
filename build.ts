@@ -3,10 +3,11 @@ import { builtinModules } from "node:module";
 import { resolve } from "node:path";
 
 const actions = [
-    { name: "send-web-notification" },
-    { name: "receive-web-notification" },
+    { name: "install-gersemi" },
     { name: "install-innosetup" },
     { name: "install-ninja" },
+    { name: "receive-web-notification" },
+    { name: "send-web-notification" },
 ];
 
 await Promise.all(
