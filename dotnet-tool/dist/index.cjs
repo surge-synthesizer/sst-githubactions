@@ -29100,7 +29100,7 @@ var Path = class {
 var { Minimatch } = import_minimatch.default;
 var IS_WINDOWS6 = process.platform === "win32";
 var Pattern = class _Pattern {
-  constructor(patternOrNegate, isImplicitPattern = false, segments, homedir3) {
+  constructor(patternOrNegate, isImplicitPattern = false, segments, homedir2) {
     this.negate = false;
     let pattern;
     if (typeof patternOrNegate === "string") {
@@ -29119,7 +29119,7 @@ var Pattern = class _Pattern {
       this.negate = !this.negate;
       pattern = pattern.substr(1).trim();
     }
-    pattern = _Pattern.fixupPattern(pattern, homedir3);
+    pattern = _Pattern.fixupPattern(pattern, homedir2);
     this.segments = new Path(pattern).segments;
     this.trailingSeparator = normalizeSeparators2(pattern).endsWith(path8.sep);
     pattern = safeTrimTrailingSeparator(pattern);
@@ -29175,7 +29175,7 @@ var Pattern = class _Pattern {
   /**
    * Normalizes slashes and ensures absolute root
    */
-  static fixupPattern(pattern, homedir3) {
+  static fixupPattern(pattern, homedir2) {
     (0, import_assert4.default)(pattern, "pattern cannot be empty");
     const literalSegments = new Path(pattern).segments.map((x) => _Pattern.getLiteral(x));
     (0, import_assert4.default)(literalSegments.every((x, i) => (x !== "." || i === 0) && x !== ".."), `Invalid pattern '${pattern}'. Relative pathing '.' and '..' is not allowed.`);
@@ -29184,10 +29184,10 @@ var Pattern = class _Pattern {
     if (pattern === "." || pattern.startsWith(`.${path8.sep}`)) {
       pattern = _Pattern.globEscape(process.cwd()) + pattern.substr(1);
     } else if (pattern === "~" || pattern.startsWith(`~${path8.sep}`)) {
-      homedir3 = homedir3 || os6.homedir();
-      (0, import_assert4.default)(homedir3, "Unable to determine HOME directory");
-      (0, import_assert4.default)(hasAbsoluteRoot(homedir3), `Expected HOME directory to be a rooted path. Actual '${homedir3}'`);
-      pattern = _Pattern.globEscape(homedir3) + pattern.substr(1);
+      homedir2 = homedir2 || os6.homedir();
+      (0, import_assert4.default)(homedir2, "Unable to determine HOME directory");
+      (0, import_assert4.default)(hasAbsoluteRoot(homedir2), `Expected HOME directory to be a rooted path. Actual '${homedir2}'`);
+      pattern = _Pattern.globEscape(homedir2) + pattern.substr(1);
     } else if (IS_WINDOWS6 && (pattern.match(/^[A-Z]:$/i) || pattern.match(/^[A-Z]:[^\\]/i))) {
       let root = ensureAbsoluteRoot("C:\\dummy-root", pattern.substr(0, 2));
       if (pattern.length > 2 && !root.endsWith("\\")) {
@@ -61197,29 +61197,48 @@ function saveCacheV2(paths_1, key_1, options_1) {
   });
 }
 
-// install-wix/src/index.ts
+// dotnet-tool/src/index.ts
 var import_node_child_process = require("node:child_process");
+var import_node_crypto4 = require("node:crypto");
+var fs9 = __toESM(require("node:fs"), 1);
 var os8 = __toESM(require("node:os"), 1);
 var path14 = __toESM(require("node:path"), 1);
+function toPathComponent(value) {
+  const normalized = value.trim().toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+  return normalized.replace(/^_+|_+$/g, "") || "tool";
+}
+function getInstallRoot(tool, version3) {
+  const digest = (0, import_node_crypto4.createHash)("sha256").update(`${tool}==${version3}`).digest("hex").slice(0, 12);
+  return `${toPathComponent(tool)}-${toPathComponent(version3)}-${digest}`;
+}
 (async () => {
-  if (os8.platform() !== "win32") {
-    return;
-  }
   try {
-    const version3 = getInput("version", { required: true });
-    const tool_dir = path14.join(os8.homedir(), ".dotnet", "tools");
-    const cache_key = `${os8.platform()}-wix-${version3}`;
-    const restored_key = await restoreCache([tool_dir], cache_key);
+    const tool = getInput("tool", { required: true }).trim();
+    const version3 = getInput("version", { required: true }).trim();
+    const workspace = process.cwd();
+    const install_root = getInstallRoot(tool, version3);
+    const tool_dir = path14.join(workspace, ".dotnet-tools", install_root);
+    const nuget_packages_dir = path14.join(workspace, ".nuget-packages", install_root);
+    const cache_key = `${os8.platform()}-dotnet-tool-${tool}-${version3}`;
+    const restored_key = await restoreCache([tool_dir, nuget_packages_dir], cache_key);
     if (!restored_key) {
-      const install_wix = (0, import_node_child_process.spawnSync)(
+      fs9.mkdirSync(tool_dir, { recursive: true });
+      fs9.mkdirSync(nuget_packages_dir, { recursive: true });
+      const install_tool = (0, import_node_child_process.spawnSync)(
         "dotnet",
-        ["tool", "install", "--global", "wix", "--version", `${version3}`],
-        { stdio: "inherit" }
+        ["tool", "install", tool, "--version", version3, "--tool-path", tool_dir],
+        {
+          stdio: "inherit",
+          env: {
+            ...process.env,
+            NUGET_PACKAGES: nuget_packages_dir
+          }
+        }
       );
-      if (install_wix.status !== 0) {
-        throw new Error(`dotnet tool install failed: ${install_wix.status}`);
+      if (install_tool.status !== 0) {
+        throw new Error(`dotnet tool install failed: ${install_tool.status}`);
       }
-      await saveCache2([tool_dir], cache_key);
+      await saveCache2([tool_dir, nuget_packages_dir], cache_key);
     }
     addPath(tool_dir);
   } catch (error2) {

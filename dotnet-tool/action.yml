@@ -1,0 +1,15 @@
+name: "dotnet tool"
+
+description: "Add a dotnet tool"
+
+inputs:
+  tool:
+    description: "Tool id"
+    required: true
+  version:
+    description: "Tool Version"
+    required: true
+
+runs:
+  using: node24
+  main: dist/index.cjs

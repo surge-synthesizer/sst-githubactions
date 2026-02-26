@@ -61253,12 +61253,6 @@ function getInstallRoot(tool, version3) {
   try {
     const tool = getInput("tool", { required: true }).trim();
     const version3 = getInput("version", { required: true }).trim();
-    if (!tool) {
-      throw new Error("Input 'tool' must not be empty");
-    }
-    if (!version3) {
-      throw new Error("Input 'version' must not be empty");
-    }
     const install_root = getInstallRoot(tool, version3);
     const tool_dir = path14.join(getToolDir(), install_root);
     const bin_dir = path14.join(getBinDir(), install_root);

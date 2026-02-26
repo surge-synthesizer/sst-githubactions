@@ -56,7 +56,10 @@ function getBinDir(): string {
 }
 
 function toPathComponent(value: string): string {
-    const normalized = value.trim().toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+    const normalized = value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]+/g, "_");
     return normalized.replace(/^_+|_+$/g, "") || "tool";
 }
 
@@ -69,14 +72,6 @@ function getInstallRoot(tool: string, version: string): string {
     try {
         const tool = getInput("tool", { required: true }).trim();
         const version = getInput("version", { required: true }).trim();
-
-        if (!tool) {
-            throw new Error("Input 'tool' must not be empty");
-        }
-
-        if (!version) {
-            throw new Error("Input 'version' must not be empty");
-        }
 
         const install_root = getInstallRoot(tool, version);
         const tool_dir = path.join(getToolDir(), install_root);

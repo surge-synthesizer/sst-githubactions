@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 const actions = [
     { name: "install-innosetup" },
     { name: "install-ninja" },
-    { name: "install-wix" },
+    { name: "dotnet-tool" },
     { name: "receive-web-notification" },
     { name: "send-web-notification" },
     { name: "uv-tool" },
