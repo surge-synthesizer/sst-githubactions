@@ -11,7 +11,10 @@ runs:
       uses: surge-synthesizer/sst-githubactions/install-python@main
 
     - name: Install clang-format
-      uses: surge-synthesizer/sst-githubactions/install-clang-format@main
+      uses: mthierman/github-actions/uv-tool@main
+      with:
+        tool: clang-format
+        version: 21.1.8
 
     - name: Run clang format
       shell: bash
