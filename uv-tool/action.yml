@@ -1,0 +1,15 @@
+name: "Install uv tool"
+
+description: "Install a Python tool with uv"
+
+inputs:
+  tool:
+    description: "Tool name"
+    required: true
+  version:
+    description: "Version"
+    required: true
+
+runs:
+  using: node24
+  main: dist/index.cjs

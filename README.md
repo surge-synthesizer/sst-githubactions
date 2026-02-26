@@ -53,6 +53,10 @@ does the steps to publish one of our libraries doxygen setups to sst-docs
 
 Send & receive product release information for both surge-synth-team.org and surge-synthesizer.github.io.
 
+## `uv-tool`
+
+Installs a Python CLI tool with uv using `tool` and `version` inputs.
+
 ## `upload-to-release`
 
 Does a release upload with build steps and release notes and so on, either
