@@ -7,13 +7,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Python
-      uses: actions/setup-python@v6
-      with:
-        python-version: "3.x"
-
-    - name: Setup uv
-      uses: astral-sh/setup-uv@v7
+    - name: Install Python
+      uses: surge-synthesizer/sst-githubactions/install-python@main
 
     - name: Install clang-format
       uses: surge-synthesizer/sst-githubactions/install-clang-format@main
