@@ -61199,25 +61199,38 @@ function saveCacheV2(paths_1, key_1, options_1) {
 
 // install-innosetup/src/index.ts
 var import_node_child_process = require("node:child_process");
+var import_node_crypto4 = require("node:crypto");
 var fs9 = __toESM(require("node:fs"), 1);
 var os8 = __toESM(require("node:os"), 1);
 var path14 = __toESM(require("node:path"), 1);
 var stream3 = __toESM(require("node:stream"), 1);
 var util6 = __toESM(require("node:util"), 1);
+function toPathComponent(value) {
+  const normalized = value.trim().toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+  return normalized.replace(/^_+|_+$/g, "") || "innosetup";
+}
+function getInstallRoot(version3, asset_name) {
+  const digest = (0, import_node_crypto4.createHash)("sha256").update(`${version3}|${asset_name}`).digest("hex").slice(0, 12);
+  return `${toPathComponent(version3)}-${digest}`;
+}
 (async () => {
   if (os8.platform() !== "win32") {
     return;
   }
   try {
     const stream_pipeline = util6.promisify(stream3.pipeline);
-    const version3 = getInput("version", { required: true });
+    const version3 = getInput("version", { required: true }).trim();
+    const platform3 = os8.platform();
+    const arch3 = os8.arch();
     const workspace = process.cwd();
-    const install_dir = path14.join(workspace, `innosetup-${version3}`);
-    const cache_key = `${os8.platform()}-innosetup-${version3}`;
+    const installer_name = `innosetup-${version3}.exe`;
+    const install_root = getInstallRoot(version3, installer_name);
+    const install_dir = path14.join(workspace, ".innosetup", install_root);
+    const cache_key = `${platform3}-${arch3}-innosetup-${version3}`;
     const restored_key = await restoreCache([install_dir], cache_key);
     if (!restored_key) {
       const asset_url = `https://files.jrsoftware.org/is/6/innosetup-${version3}.exe`;
-      const installer_path = path14.join(workspace, `innosetup-${version3}.exe`);
+      const installer_path = path14.join(workspace, installer_name);
       const res = await fetch(asset_url);
       if (!res.ok) {
         throw new Error(`Failed to fetch ${asset_url}: ${res.statusText}`);
@@ -61226,9 +61239,21 @@ var util6 = __toESM(require("node:util"), 1);
         throw new Error("Response body is null");
       }
       await stream_pipeline(res.body, fs9.createWriteStream(installer_path));
-      (0, import_node_child_process.spawnSync)(installer_path, ["/VERYSILENT", "/CURRENTUSER", `/DIR=${install_dir}`], {
-        stdio: "inherit"
-      });
+      const install_result = (0, import_node_child_process.spawnSync)(
+        installer_path,
+        ["/VERYSILENT", "/CURRENTUSER", `/DIR=${install_dir}`],
+        {
+          stdio: "inherit"
+        }
+      );
+      if (install_result.error) {
+        throw install_result.error;
+      }
+      if (install_result.status !== 0) {
+        throw new Error(
+          `Inno Setup installation failed with code ${install_result.status}`
+        );
+      }
       fs9.rmSync(installer_path);
       await saveCache2([install_dir], cache_key);
     }

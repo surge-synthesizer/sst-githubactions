@@ -4,8 +4,8 @@ description: "Install Inno Setup"
 
 inputs:
   version:
-    description: "Version"
-    default: "6.7.1"
+    description: "Version of Inno Setup to install (e.g. 6.7.1)"
+    required: true
 
 runs:
   using: node24
