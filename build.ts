@@ -3,9 +3,9 @@ import { builtinModules } from "node:module";
 import { resolve } from "node:path";
 
 const actions = [
+    { name: "dotnet-tool" },
     { name: "install-innosetup" },
     { name: "install-ninja" },
-    { name: "dotnet-tool" },
     { name: "receive-web-notification" },
     { name: "send-web-notification" },
     { name: "uv-tool" },
