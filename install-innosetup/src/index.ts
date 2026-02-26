@@ -9,8 +9,7 @@ import * as stream from "node:stream";
 import * as util from "node:util";
 
 (async () => {
-    if (process.env.RUNNER_OS !== "Windows") {
-        core.info(`Runner OS is not Windows, skipping...`);
+    if (os.platform() !== "win32") {
         return;
     }
 
@@ -48,7 +47,6 @@ import * as util from "node:util";
         }
 
         core.addPath(install_dir);
-        core.info(`Inno Setup ${version} added to PATH`);
     } catch (error: any) {
         core.setFailed(error.message);
     }

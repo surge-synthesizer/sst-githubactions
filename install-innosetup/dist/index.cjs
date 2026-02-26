@@ -61205,8 +61205,7 @@ var path14 = __toESM(require("node:path"), 1);
 var stream3 = __toESM(require("node:stream"), 1);
 var util6 = __toESM(require("node:util"), 1);
 (async () => {
-  if (process.env.RUNNER_OS !== "Windows") {
-    info(`Runner OS is not Windows, skipping...`);
+  if (os8.platform() !== "win32") {
     return;
   }
   try {
@@ -61234,7 +61233,6 @@ var util6 = __toESM(require("node:util"), 1);
       await saveCache2([install_dir], cache_key);
     }
     addPath(install_dir);
-    info(`Inno Setup ${version3} added to PATH`);
   } catch (error2) {
     setFailed(error2.message);
   }
