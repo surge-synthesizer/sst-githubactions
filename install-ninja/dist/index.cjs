@@ -64908,6 +64908,20 @@ var path14 = __toESM(require("node:path"), 1);
 var stream3 = __toESM(require("node:stream"), 1);
 var util6 = __toESM(require("node:util"), 1);
 (async () => {
+  let platform3;
+  switch (os8.platform()) {
+    case "win32":
+      platform3 = "win";
+      break;
+    case "linux":
+      platform3 = "linux";
+      break;
+    case "darwin":
+      platform3 = "mac";
+      break;
+    default:
+      return;
+  }
   try {
     const stream_pipeline = util6.promisify(stream3.pipeline);
     const version3 = getInput("version", { required: true });
@@ -64915,25 +64929,8 @@ var util6 = __toESM(require("node:util"), 1);
     const install_dir = path14.join(workspace, `ninja-${version3}`);
     const cache_key = `${os8.platform()}-ninja-${version3}`;
     const restored_key = await restoreCache([install_dir], cache_key);
-    if (restored_key) {
-      info(`Cache hit for Ninja ${version3}`);
-    } else {
-      info(`Cache miss, downloading Ninja ${version3}`);
+    if (!restored_key) {
       fs9.mkdirSync(install_dir, { recursive: true });
-      let platform3;
-      switch (os8.platform()) {
-        case "win32":
-          platform3 = "win";
-          break;
-        case "linux":
-          platform3 = "linux";
-          break;
-        case "darwin":
-          platform3 = "mac";
-          break;
-        default:
-          throw new Error(`Unsupported OS: ${os8.platform()}`);
-      }
       const octokit = new Octokit2();
       const releases = await octokit.rest.repos.getReleaseByTag({
         owner: "ninja-build",
@@ -64967,7 +64964,6 @@ var util6 = __toESM(require("node:util"), 1);
       await saveCache2([install_dir], cache_key);
     }
     addPath(install_dir);
-    info(`Ninja ${version3} added to PATH`);
   } catch (error2) {
     setFailed(error2.message);
   }

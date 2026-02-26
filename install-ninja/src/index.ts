@@ -10,6 +10,21 @@ import * as stream from "node:stream";
 import * as util from "node:util";
 
 (async () => {
+    let platform: string;
+    switch (os.platform()) {
+        case "win32":
+            platform = "win";
+            break;
+        case "linux":
+            platform = "linux";
+            break;
+        case "darwin":
+            platform = "mac";
+            break;
+        default:
+            return;
+    }
+
     try {
         const stream_pipeline = util.promisify(stream.pipeline);
         const version = getInput("version", { required: true });
@@ -18,27 +33,8 @@ import * as util from "node:util";
         const cache_key = `${os.platform()}-ninja-${version}`;
         const restored_key = await cache.restoreCache([install_dir], cache_key);
 
-        if (restored_key) {
-            core.info(`Cache hit for Ninja ${version}`);
-        } else {
-            core.info(`Cache miss, downloading Ninja ${version}`);
-
+        if (!restored_key) {
             fs.mkdirSync(install_dir, { recursive: true });
-
-            let platform: string;
-            switch (os.platform()) {
-                case "win32":
-                    platform = "win";
-                    break;
-                case "linux":
-                    platform = "linux";
-                    break;
-                case "darwin":
-                    platform = "mac";
-                    break;
-                default:
-                    throw new Error(`Unsupported OS: ${os.platform()}`);
-            }
 
             const octokit = new Octokit();
             const releases = await octokit.rest.repos.getReleaseByTag({
@@ -85,7 +81,6 @@ import * as util from "node:util";
         }
 
         core.addPath(install_dir);
-        core.info(`Ninja ${version} added to PATH`);
     } catch (error: any) {
         core.setFailed(error.message);
     }
