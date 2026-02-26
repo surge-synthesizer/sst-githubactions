@@ -64902,32 +64902,47 @@ var Octokit2 = Octokit.plugin(requestLog, legacyRestEndpointMethods, paginateRes
 
 // install-ninja/src/index.ts
 var import_node_child_process = require("node:child_process");
+var import_node_crypto4 = require("node:crypto");
 var fs9 = __toESM(require("node:fs"), 1);
 var os8 = __toESM(require("node:os"), 1);
 var path14 = __toESM(require("node:path"), 1);
 var stream3 = __toESM(require("node:stream"), 1);
 var util6 = __toESM(require("node:util"), 1);
-(async () => {
-  let platform3;
-  switch (os8.platform()) {
+function toPathComponent(value) {
+  const normalized = value.trim().toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+  return normalized.replace(/^_+|_+$/g, "") || "ninja";
+}
+function getInstallRoot(version3, asset_name) {
+  const digest = (0, import_node_crypto4.createHash)("sha256").update(`${version3}|${asset_name}`).digest("hex").slice(0, 12);
+  return `${toPathComponent(version3)}-${digest}`;
+}
+function getNinjaAssetName(platform3, arch3) {
+  switch (platform3) {
     case "win32":
-      platform3 = "win";
+      if (arch3 === "arm64") return "ninja-winarm64.zip";
+      if (arch3 === "x64") return "ninja-win.zip";
       break;
     case "linux":
-      platform3 = "linux";
+      if (arch3 === "arm64") return "ninja-linux-aarch64.zip";
+      if (arch3 === "x64") return "ninja-linux.zip";
       break;
     case "darwin":
-      platform3 = "mac";
+      if (arch3 === "arm64" || arch3 === "x64") return "ninja-mac.zip";
       break;
-    default:
-      return;
   }
+  throw new Error(`Unsupported platform/arch combination: ${platform3}/${arch3}`);
+}
+(async () => {
   try {
     const stream_pipeline = util6.promisify(stream3.pipeline);
-    const version3 = getInput("version", { required: true });
+    const version3 = getInput("version", { required: true }).trim();
+    const platform3 = os8.platform();
+    const arch3 = os8.arch();
+    const asset_name = getNinjaAssetName(platform3, arch3);
     const workspace = process.cwd();
-    const install_dir = path14.join(workspace, `ninja-${version3}`);
-    const cache_key = `${os8.platform()}-ninja-${version3}`;
+    const install_root = getInstallRoot(version3, asset_name);
+    const install_dir = path14.join(workspace, ".ninja", install_root);
+    const cache_key = `${platform3}-${arch3}-ninja-${version3}`;
     const restored_key = await restoreCache([install_dir], cache_key);
     if (!restored_key) {
       fs9.mkdirSync(install_dir, { recursive: true });
@@ -64937,9 +64952,9 @@ var util6 = __toESM(require("node:util"), 1);
         repo: "ninja",
         tag: `v${version3}`
       });
-      const asset = releases.data.assets.find((a) => a.name.includes(platform3));
+      const asset = releases.data.assets.find((a) => a.name === asset_name);
       if (!asset) {
-        throw new Error(`No asset found for platform ${platform3}`);
+        throw new Error(`No asset found for ${asset_name} in ninja release v${version3}`);
       }
       const asset_url = asset.browser_download_url;
       const zip_path = path14.join(workspace, asset.name);
