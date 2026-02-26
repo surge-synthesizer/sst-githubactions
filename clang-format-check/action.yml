@@ -7,10 +7,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Python
-      uses: surge-synthesizer/sst-githubactions/install-python@main
+    - name: Setup Python
+      uses: surge-synthesizer/sst-githubactions/setup-python@main
 
-    - name: Install clang-format
+    - name: Setup clang-format
       uses: surge-synthesizer/sst-githubactions/uv-tool@main
       with:
         tool: clang-format

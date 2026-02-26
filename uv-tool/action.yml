@@ -1,13 +1,13 @@
-name: "Install uv tool"
+name: "uv tool"
 
-description: "Install a Python tool with uv"
+description: "Add a Python tool with uv"
 
 inputs:
   tool:
     description: "Tool name"
     required: true
   version:
-    description: "Version"
+    description: "Tool version"
     required: true
 
 runs:

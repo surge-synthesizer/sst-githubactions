@@ -3,8 +3,6 @@ import { builtinModules } from "node:module";
 import { resolve } from "node:path";
 
 const actions = [
-    { name: "install-clang-format" },
-    { name: "install-gersemi" },
     { name: "install-innosetup" },
     { name: "install-ninja" },
     { name: "install-wix" },

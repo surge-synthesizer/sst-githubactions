@@ -1,0 +1,7 @@
+name: "Setup Python"
+description: "Setup Python & uv"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v6
+    - uses: astral-sh/setup-uv@v7
