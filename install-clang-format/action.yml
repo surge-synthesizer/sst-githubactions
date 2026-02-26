@@ -1,0 +1,12 @@
+name: "Install Clang Format"
+
+description: "Install Clang Format"
+
+inputs:
+  version:
+    description: "Version"
+    default: "22.1.0"
+
+runs:
+  using: node24
+  main: dist/index.cjs

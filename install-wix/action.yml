@@ -1,0 +1,12 @@
+name: "Install Wix"
+
+description: "Install Wix"
+
+inputs:
+  version:
+    description: "Version"
+    default: "6.0.2"
+
+runs:
+  using: node24
+  main: dist/index.cjs
