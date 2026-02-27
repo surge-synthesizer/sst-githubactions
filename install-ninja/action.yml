@@ -5,7 +5,7 @@ description: "Install Ninja"
 inputs:
   version:
     description: "Version of Ninja to install (e.g. 1.13.2)"
-    required: true
+    default: "1.13.2"
 
 runs:
   using: node24
