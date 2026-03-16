@@ -47,7 +47,8 @@ runs:
         ( test -f ./scripts/make-git-info.sh && . ./scripts/make-git-info.sh ) || true
         ( test -f libs/sst/sst-plugininfra/cmake/git-version-functions.cmake && cmake -DGITHUB_ACTIONS_BUILD=TRUE -DGENERATE_BUILD_VERSION=TRUE -P libs/sst/sst-plugininfra/cmake/git-version-functions.cmake ) || true
 
-        export TFN=${{ github.event.repository.name }}-source-`git rev-parse --short HEAD`.tar.gz
+        export REPO_LOWER=`echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]'`
+        export TFN=${REPO_LOWER}-source-`git rev-parse --short HEAD`.tar.gz
         mv .git ../old_dotgit
         tar czf ../${TFN} .
         mv ../old_dotgit .git
