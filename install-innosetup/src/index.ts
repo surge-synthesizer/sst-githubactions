@@ -41,9 +41,10 @@ function getInstallRoot(version: string, asset_name: string): string {
         const install_dir = path.join(workspace, ".innosetup", install_root);
         const cache_key = `${platform}-${arch}-innosetup-${version}`;
         const restored_key = await cache.restoreCache([install_dir], cache_key);
+        const version_underscore = ${version}.replace(/\./g,'_');
 
         if (!restored_key) {
-            const asset_url = `https://files.jrsoftware.org/is/6/innosetup-${version}.exe`;
+            const asset_url = `https://github.com/jrsoftware/issrc/releases/download/is-${version_underscore}/innosetup-${version}.exe`;
             const installer_path = path.join(workspace, installer_name);
 
             const res = await fetch(asset_url);
