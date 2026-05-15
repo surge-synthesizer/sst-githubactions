@@ -1,7 +1,7 @@
 import { getInput } from "@actions/core";
 import { Temporal } from "@js-temporal/polyfill";
 import { Octokit } from "@octokit/rest";
-import { execSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 (async () => {
     const web_repo = getInput("web_repo");
@@ -37,9 +37,7 @@ import { execSync, spawnSync } from "node:child_process";
             data: {
                 name,
                 version,
-                project_repo: execSync(`gh repo view --json url --jq .url`, {
-                    encoding: "utf-8",
-                }).trim(),
+                project_repo: `${process.env.GITHUB_SERVER_URL ?? "https://github.com"}/${process.env.GITHUB_REPOSITORY}`,
                 releases,
                 data,
                 build_time: Temporal.Now.plainDateTimeISO().toString(),
