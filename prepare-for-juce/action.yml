@@ -4,7 +4,7 @@ inputs:
   os:  # id of input
     required: true
   gccversion:
-    default: 12
+    default: 13
     description: "Which GCC version to pick on ubuntu"
 runs:
   using: "composite"
