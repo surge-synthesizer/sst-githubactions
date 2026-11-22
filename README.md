@@ -28,6 +28,20 @@ jobs:
           path: ${{ matrix.path }}
 ```
 
+## `check-glibc`
+
+Fails if any binary in a deb or directory needs a newer glibc than allowed,
+so a linux build made outside its docker image can't ship by accident. Prints
+the highest libstdc++ version too, and can enforce that with `maxGlibcxx`.
+
+```yaml
+      - name: Check glibc
+        uses: surge-synthesizer/sst-githubactions/check-glibc@main
+        with:
+          path: ./build/installer/*.deb
+          maxGlibc: "2.35"
+```
+
 ## `discord-release-notify`
 
 Builds a notification of release to our discord, given a webhook.
