@@ -1,0 +1,23 @@
+name: 'Check glibc'
+description: 'Fail if any ELF in a deb or directory needs a newer glibc than allowed'
+inputs:
+  path:
+    required: true
+    description: "Space separated .deb files or directories; globs are expanded"
+  maxGlibc:
+    default: "2.35"
+    description: "Highest glibc symbol version the binaries may need"
+  maxGlibcxx:
+    default: ""
+    description: "Highest libstdc++ symbol version, e.g. 3.4.30; empty only reports it"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check glibc
+      shell: bash
+      env:
+        CHECK_GLIBC_PATHS: ${{ inputs.path }}
+        CHECK_GLIBC_MAX: ${{ inputs.maxGlibc }}
+        CHECK_GLIBCXX_MAX: ${{ inputs.maxGlibcxx }}
+      run: bash "${{ github.action_path }}/check-glibc.sh"
